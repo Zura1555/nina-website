@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { ProjectCard } from "@/components/ProjectCard";
 import { BlogCard } from "@/components/BlogCard";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
+import { imageConfig } from "@/config/images";
 import type { ExtendedProject } from "@/components/ProjectCard";
 import type { BlogPost } from "@/components/BlogCard";
 
@@ -55,7 +56,7 @@ export function HomeContent({ featuredProjects, latestPosts }: HomeContentProps)
 
               {/* Profile circle placeholder */}
               <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-br from-primary-lighter to-primary-light flex items-center justify-center overflow-hidden border-4 border-card shadow-lg">
-                <span className="text-6xl md:text-7xl">👩</span>
+                <span className="text-6xl md:text-7xl">{imageConfig.placeholders.profile}</span>
               </div>
             </motion.div>
 

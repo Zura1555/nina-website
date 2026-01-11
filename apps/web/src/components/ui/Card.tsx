@@ -70,7 +70,7 @@ export function CardContent({
   children: ReactNode;
   className?: string;
 }) {
-  return <div className={cn("p-6", className)}>{children}</div>;
+  return <div className={cn("p-4 md:p-6", className)}>{children}</div>;
 }
 
 export function CardTitle({

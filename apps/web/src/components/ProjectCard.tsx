@@ -7,6 +7,7 @@ import { Card, CardContent, CardImage } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { fadeInUp } from "@/lib/animations";
 import { urlFor } from "@/sanity/image";
+import { imageConfig } from "@/config/images";
 import type { Project } from "@/types/sanity";
 
 // Extended Project interface that supports both Sanity and legacy mock formats
@@ -68,7 +69,7 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-4xl">🎨</span>
+            <span className="text-4xl">{imageConfig.placeholders.project}</span>
           )}
         </div>
 

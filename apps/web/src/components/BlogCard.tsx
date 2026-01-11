@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/Badge";
 import { fadeInUp } from "@/lib/animations";
 import { formatDate } from "@/lib/utils";
 import { urlFor } from "@/sanity/image";
+import { imageConfig } from "@/config/images";
 
 // Mock BlogPost type (legacy)
 interface MockBlogPost {
@@ -98,7 +99,7 @@ export function BlogCard({ post, index = 0 }: BlogCardProps) {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <span className="text-5xl">✍️</span>
+              <span className="text-5xl">{imageConfig.placeholders.blogPost}</span>
             )}
 
             {/* Gradient overlay */}

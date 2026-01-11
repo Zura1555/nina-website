@@ -60,3 +60,10 @@ export default function RootLayout({
     </html>
   );
 }
+
+// Add responsive padding to main content
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};

@@ -1,5 +1,40 @@
 import { client } from './client'
-import type { Project, BlogPost } from '@/types/sanity'
+import type { Project, BlogPost, Page } from '@/types/sanity'
+
+export const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
+  _id,
+  title,
+  slug,
+  icon,
+  seo {
+    metaTitle,
+    metaDescription
+  },
+  sections[] {
+    _key,
+    _type,
+    heading,
+    tagline,
+    icon,
+    image {
+      _type,
+      asset->{
+        _id,
+        _type,
+        url
+      },
+      alt,
+      hotspot
+    },
+    imageAlt,
+    caption,
+    layout,
+    body,
+    description,
+    buttonText,
+    buttonUrl
+  }
+}`
 
 export const PROJECTS_QUERY = `*[_type == "project"]|order(_createdAt desc){
   _id,
@@ -51,6 +86,20 @@ export const LATEST_POSTS_QUERY = `*[_type == "post"]|order(publishedAt desc)[0.
   "tags": tags
 }`
 
+export const POSTS_WITH_LIMIT_QUERY = `*[_type == "post"]|order(publishedAt desc)[0...$limit]{
+  _id,
+  title,
+  slug,
+  publishedAt,
+  excerpt,
+  mainImage,
+  "tags": tags
+}`
+
+export async function getPage(slug: string): Promise<Page | null> {
+  return client.fetch<Page | null>(PAGE_QUERY, { slug })
+}
+
 export async function getProjects(): Promise<Project[]> {
   return client.fetch<Project[]>(PROJECTS_QUERY)
 }
@@ -63,6 +112,10 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
   return client.fetch<Project | null>(PROJECT_BY_SLUG_QUERY, { slug })
 }
 
-export async function getLatestPosts(): Promise<BlogPost[]> {
-  return client.fetch<BlogPost[]>(LATEST_POSTS_QUERY)
+export async function getLatestPosts(limit: number = 3): Promise<BlogPost[]> {
+  return client.fetch<BlogPost[]>(POSTS_WITH_LIMIT_QUERY, { limit })
+}
+
+export async function getHomepage(): Promise<Page | null> {
+  return client.fetch<Page | null>(PAGE_QUERY, { slug: 'home' })
 }
