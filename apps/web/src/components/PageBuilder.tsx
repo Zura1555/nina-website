@@ -1,3 +1,4 @@
+import type { PageSection } from '@/types/sanity'
 import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/image";
 import { PortableText } from "@portabletext/react";
@@ -17,7 +18,7 @@ const fadeIn = {
   transition: { duration: 0.3 },
 };
 
-export default function PageBuilder({ blocks }: { blocks: any[] }) {
+export default function PageBuilder({ blocks }: { blocks: PageSection[] }) {
   if (!blocks) return null;
 
   return (
@@ -36,7 +37,7 @@ export default function PageBuilder({ blocks }: { blocks: any[] }) {
   );
 }
 
-function BlockRenderer({ block }: { block: any }) {
+function BlockRenderer({ block }: { block: PageSection }) {
   switch (block._type) {
     case "hero":
       return (
@@ -74,29 +75,29 @@ function BlockRenderer({ block }: { block: any }) {
         </section>
       );
 
-    case "callToAction":
+    case "cta":
       return (
         <div className="text-center my-8">
-          <Link href={block.url}>
+          <Link href={block.buttonUrl || "#"}>
             <Button size="lg">
-              {block.linkText}
+              {block.buttonText}
             </Button>
           </Link>
         </div>
       );
 
-    case "content":
+    case "text":
       return (
         <div className="prose prose-lg max-w-3xl mx-auto">
-          <PortableText value={block.body} />
+          <PortableText value={block.body || []} />
         </div>
       );
 
     case "toggle":
       return (
         <ToggleBlock
-          summary={block.summary}
-          defaultOpen={block.defaultOpen}
+          summary={block.summary || ""}
+          defaultOpen={block.defaultOpen || false}
         >
           {block.content && <PortableText value={block.content} />}
         </ToggleBlock>
@@ -106,15 +107,15 @@ function BlockRenderer({ block }: { block: any }) {
       return (
         <TodoBlock
           checked={block.checked || false}
-          text={block.text}
+          text={block.text || ""}
         />
       );
 
     case "callout":
       return (
         <CalloutBlock
-          emoji={block.emoji}
-          title={block.title}
+          emoji={block.emoji || ""}
+          title={block.title || ""}
           variant={block.variant || "default"}
         >
           {block.content && <PortableText value={block.content} />}
@@ -124,18 +125,18 @@ function BlockRenderer({ block }: { block: any }) {
     case "quote":
       return (
         <QuoteBlock
-          content={block.content}
-          author={block.author}
+          content={block.content || ""}
+          author={block.author || ""}
         />
       );
 
     case "code":
       return (
         <CodeBlock
-          code={block.code}
-          language={block.language}
-          filename={block.filename}
-          showLineNumbers={block.showLineNumbers}
+          code={block.code || ""}
+          language={block.language || ""}
+          filename={block.filename || ""}
+          showLineNumbers={block.showLineNumbers || false}
         />
       );
 

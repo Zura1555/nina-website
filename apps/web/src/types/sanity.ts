@@ -16,7 +16,7 @@ export interface Page {
   sections?: PageSection[]
 }
 
-export type PageSection = HeroSection | TextImageSection | TextSection | ImageSection | CTASection
+export type PageSection = HeroSection | TextImageSection | TextSection | ImageSection | CTASection | CalloutSection | QuoteSection | CodeSection | ToggleSection | TodoSection | DividerSection
 
 export interface HeroSection {
   _key: string
@@ -50,6 +50,7 @@ export interface ImageSection {
   image?: SanityImage
   caption?: string
   imageAlt?: string
+  alt?: string
 }
 
 export interface CTASection {
@@ -59,6 +60,51 @@ export interface CTASection {
   description?: string
   buttonText?: string
   buttonUrl?: string
+}
+
+export interface CalloutSection {
+  _key: string
+  _type: 'callout'
+  emoji?: string
+  title?: string
+  variant?: 'default' | 'info' | 'warning' | 'success'
+  content?: PortableTextBlock[]
+}
+
+export interface QuoteSection {
+  _key: string
+  _type: 'quote'
+  content?: string
+  author?: string
+}
+
+export interface CodeSection {
+  _key: string
+  _type: 'code'
+  code?: string
+  language?: string
+  filename?: string
+  showLineNumbers?: boolean
+}
+
+export interface ToggleSection {
+  _key: string
+  _type: 'toggle'
+  summary?: string
+  defaultOpen?: boolean
+  content?: PortableTextBlock[]
+}
+
+export interface TodoSection {
+  _key: string
+  _type: 'todo'
+  checked?: boolean
+  text?: string
+}
+
+export interface DividerSection {
+  _key: string
+  _type: 'divider'
 }
 
 export interface Project {
