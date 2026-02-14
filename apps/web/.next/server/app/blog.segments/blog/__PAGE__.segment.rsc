@@ -1,5 +1,0 @@
-1:"$Sreact.fragment"
-2:I[97367,["/_next/static/chunks/ff1a16fafef87110.js","/_next/static/chunks/5573ecad36b5dd73.js"],"OutletBoundary"]
-3:"$Sreact.suspense"
-0:{"buildId":"RI9myTr23ikO_pTj-SjfF","rsc":["$","$1","c",{"children":[["$","main",null,{"className":"min-h-screen bg-[#0a0a0a] text-[#ededed] py-20","children":["$","div",null,{"className":"max-w-7xl mx-auto px-4","children":[["$","header",null,{"className":"text-center mb-16","children":[["$","h1",null,{"className":"text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400","children":"Nina's Blog"}],["$","p",null,{"className":"text-xl text-gray-400","children":"Welcome to my world of thoughts and stories."}]]}],["$","div",null,{"className":"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8","children":["$","p",null,{"className":"col-span-full text-center text-gray-500","children":"No posts found. Start writing in Sanity Studio!"}]}]]}]}],null,["$","$L2",null,{"children":["$","$3",null,{"name":"Next.MetadataOutlet","children":"$@4"}]}]]}],"loading":null,"isPartial":false}
-4:null
