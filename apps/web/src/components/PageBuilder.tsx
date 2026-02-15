@@ -1,5 +1,4 @@
 import type { PageSection } from '@/types/sanity'
-import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/image";
 import { PortableText } from "@portabletext/react";
 import Link from "next/link";
@@ -11,6 +10,46 @@ import { QuoteBlock } from "@/components/blocks/QuoteBlock";
 import { CodeBlock } from "@/components/blocks/CodeBlock";
 import { DividerBlock } from "@/components/blocks/DividerBlock";
 import { Button } from "@/components/ui/Button";
+import type { PortableTextBlock } from "next-sanity";
+
+interface PortableImageValue {
+  _type: "image";
+  alt?: string;
+  caption?: string;
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
+}
+
+interface CalloutValue {
+  emoji?: string;
+  title?: string;
+  variant?: "default" | "info" | "warning" | "success";
+  content?: PortableTextBlock[];
+}
+
+interface QuoteValue {
+  content?: string;
+  author?: string;
+}
+
+interface CodeValue {
+  code?: string;
+  language?: string;
+  filename?: string;
+}
+
+interface ToggleValue {
+  summary?: string;
+  defaultOpen?: boolean;
+  content?: PortableTextBlock[];
+}
+
+interface TodoValue {
+  checked?: boolean;
+  text?: string;
+}
 
 const fadeIn = {
   initial: { opacity: 0, y: 10 },
@@ -147,8 +186,8 @@ function BlockRenderer({ block }: { block: PageSection }) {
       return (
         <figure className="my-8">
           <img
-            src={urlFor(block).width(800).url()}
-            alt={block.alt || ""}
+            src={block.image ? urlFor(block.image).width(800).url() : ""}
+            alt={block.imageAlt || block.alt || ""}
             className="w-full h-auto rounded-lg"
           />
           {block.caption && (
@@ -168,7 +207,7 @@ function BlockRenderer({ block }: { block: PageSection }) {
 // Portable Text components for rich text content
 export const portableTextComponents = {
   types: {
-    image: ({ value }: { value: any }) => {
+    image: ({ value }: { value: PortableImageValue }) => {
       return (
         <figure className="my-6">
           <img
@@ -184,32 +223,32 @@ export const portableTextComponents = {
         </figure>
       );
     },
-    callout: ({ value }: { value: any }) => (
+    callout: ({ value }: { value: CalloutValue }) => (
       <CalloutBlock
-        emoji={value.emoji}
-        title={value.title}
+        emoji={value.emoji || ""}
+        title={value.title || ""}
         variant={value.variant || "default"}
       >
-        <PortableText value={value.content} />
+        <PortableText value={value.content || []} />
       </CalloutBlock>
     ),
-    quote: ({ value }: { value: any }) => (
-      <QuoteBlock content={value.content} author={value.author} />
+    quote: ({ value }: { value: QuoteValue }) => (
+      <QuoteBlock content={value.content || ""} author={value.author} />
     ),
-    code: ({ value }: { value: any }) => (
+    code: ({ value }: { value: CodeValue }) => (
       <CodeBlock
-        code={value.code}
-        language={value.language}
-        filename={value.filename}
+        code={value.code || ""}
+        language={value.language || ""}
+        filename={value.filename || ""}
       />
     ),
-    toggle: ({ value }: { value: any }) => (
-      <ToggleBlock summary={value.summary} defaultOpen={value.defaultOpen}>
-        <PortableText value={value.content} />
+    toggle: ({ value }: { value: ToggleValue }) => (
+      <ToggleBlock summary={value.summary || ""} defaultOpen={value.defaultOpen || false}>
+        <PortableText value={value.content || []} />
       </ToggleBlock>
     ),
-    todo: ({ value }: { value: any }) => (
-      <TodoBlock checked={value.checked || false} text={value.text} />
+    todo: ({ value }: { value: TodoValue }) => (
+      <TodoBlock checked={value.checked || false} text={value.text || ""} />
     ),
   },
   block: {

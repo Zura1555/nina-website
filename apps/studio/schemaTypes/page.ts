@@ -46,8 +46,8 @@ export default defineType({
             ],
         }),
         defineField({
-            name: 'sections',
-            title: 'Content Sections',
+            name: 'pageBuilder',
+            title: 'Page Builder',
             type: 'array',
             of: [
                 {
@@ -80,8 +80,8 @@ export default defineType({
                     ],
                 },
                 {
-                    name: 'textImage',
-                    title: 'Text & Image',
+                    name: 'content',
+                    title: 'Content Section',
                     type: 'object',
                     fields: [
                         defineField({
@@ -94,101 +94,6 @@ export default defineType({
                             title: 'Body Text',
                             type: 'array',
                             of: [{ type: 'block' }],
-                        }),
-                        defineField({
-                            name: 'image',
-                            title: 'Image',
-                            type: 'image',
-                            options: { hotspot: true },
-                        }),
-                        defineField({
-                            name: 'imageAlt',
-                            title: 'Image Alt Text',
-                            type: 'string',
-                        }),
-                        defineField({
-                            name: 'layout',
-                            title: 'Layout',
-                            type: 'string',
-                            options: {
-                                list: [
-                                    { title: 'Image Left', value: 'imageLeft' },
-                                    { title: 'Image Right', value: 'imageRight' },
-                                    { title: 'Image Full Width', value: 'imageFull' },
-                                    { title: 'Text Only', value: 'textOnly' },
-                                    { title: 'Image Only', value: 'imageOnly' },
-                                ],
-                            },
-                            initialValue: 'imageLeft',
-                        }),
-                    ],
-                },
-                {
-                    name: 'text',
-                    title: 'Text Only',
-                    type: 'object',
-                    fields: [
-                        defineField({
-                            name: 'heading',
-                            title: 'Heading',
-                            type: 'string',
-                        }),
-                        defineField({
-                            name: 'body',
-                            title: 'Body Text',
-                            type: 'array',
-                            of: [{ type: 'block' }],
-                        }),
-                    ],
-                },
-                {
-                    name: 'image',
-                    title: 'Image Only',
-                    type: 'object',
-                    fields: [
-                        defineField({
-                            name: 'image',
-                            title: 'Image',
-                            type: 'image',
-                            options: { hotspot: true },
-                        }),
-                        defineField({
-                            name: 'caption',
-                            title: 'Caption',
-                            type: 'string',
-                        }),
-                        defineField({
-                            name: 'imageAlt',
-                            title: 'Alt Text',
-                            type: 'string',
-                        }),
-                    ],
-                },
-                {
-                    name: 'cta',
-                    title: 'Call to Action',
-                    type: 'object',
-                    fields: [
-                        defineField({
-                            name: 'heading',
-                            title: 'Heading',
-                            type: 'string',
-                        }),
-                        defineField({
-                            name: 'description',
-                            title: 'Description',
-                            type: 'text',
-                            rows: 2,
-                        }),
-                        defineField({
-                            name: 'buttonText',
-                            title: 'Button Text',
-                            type: 'string',
-                        }),
-                        defineField({
-                            name: 'buttonUrl',
-                            title: 'Button URL',
-                            type: 'string',
                         }),
                     ],
                 },

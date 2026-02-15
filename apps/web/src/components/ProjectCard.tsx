@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Card, CardContent, CardImage } from "@/components/ui/Card";
@@ -8,7 +7,6 @@ import { Badge } from "@/components/ui/Badge";
 import { fadeInUp } from "@/lib/animations";
 import { urlFor } from "@/sanity/image";
 import { imageConfig } from "@/config/images";
-import type { Project } from "@/types/sanity";
 
 // Extended Project interface that supports both Sanity and legacy mock formats
 export interface ExtendedProject {
@@ -44,9 +42,6 @@ export function ProjectCard({ project, index = 0 }: ProjectCardProps) {
   const imageUrl = project.mainImage
     ? urlFor(project.mainImage).width(600).height(450).url()
     : project.image;
-
-  // Support both Sanity _id and legacy mock id
-  const projectId = project._id || project.id;
 
   // Generate href from link or slug
   const href = project.link || (project.slug ? `/projects/${project.slug.current}` : '#');

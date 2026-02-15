@@ -4,6 +4,9 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { VisualEditing } from "next-sanity/visual-editing";
+import { DisableDraftMode } from "@/components/DisableDraftMode";
+import { draftMode } from "next/headers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -41,11 +44,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDraftMode = (await draftMode()).isEnabled
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
@@ -56,6 +61,12 @@ export default function RootLayout({
             <Footer />
           </div>
         </ThemeProvider>
+        {isDraftMode && (
+          <>
+            <DisableDraftMode />
+            <VisualEditing />
+          </>
+        )}
       </body>
     </html>
   );

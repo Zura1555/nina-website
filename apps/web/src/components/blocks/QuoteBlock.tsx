@@ -14,7 +14,7 @@ export function QuoteBlock({ content, author, className }: QuoteBlockProps) {
         className
       )}
     >
-      <p className="text-lg italic text-muted-foreground mb-2">"{content}"</p>
+      <p className="text-lg italic text-muted-foreground mb-2">&ldquo;{content}&rdquo;</p>
       {author && (
         <cite className="text-sm text-muted-foreground not-italic">
           — {author}

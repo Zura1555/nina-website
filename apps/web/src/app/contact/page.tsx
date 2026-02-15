@@ -37,7 +37,7 @@ export default function ContactPage() {
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Have a question, want to collaborate, or just want to say hi?
-              I'd love to hear from you. Fill out the form below or reach out
+              I&apos;d love to hear from you. Fill out the form below or reach out
               through social media.
             </p>
           </motion.div>

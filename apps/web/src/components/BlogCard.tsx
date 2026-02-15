@@ -9,6 +9,8 @@ import { fadeInUp } from "@/lib/animations";
 import { formatDate } from "@/lib/utils";
 import { urlFor } from "@/sanity/image";
 import { imageConfig } from "@/config/images";
+import type { PortableTextBlock } from "next-sanity";
+import type { SanityImage } from "@/types/sanity";
 
 // Mock BlogPost type (legacy)
 interface MockBlogPost {
@@ -31,25 +33,12 @@ interface SanityBlogPost {
   slug: { current: string };
   publishedAt: string;
   excerpt?: string;
-  mainImage?: {
-    _type: 'image';
-    asset: {
-      _ref: string;
-      _type: 'reference';
-    };
-    alt?: string;
-  };
+  mainImage?: SanityImage;
   tags?: string[];
-  body?: any[];
+  body?: PortableTextBlock[];
   author?: {
     name: string;
-    image?: {
-      _type: 'image';
-      asset: {
-        _ref: string;
-        _type: 'reference';
-      };
-    };
+    image?: SanityImage;
   };
 }
 

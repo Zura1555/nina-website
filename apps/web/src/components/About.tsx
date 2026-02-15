@@ -27,21 +27,21 @@ export function About() {
             className="prose prose-lg mx-auto text-left"
           >
             <p className="text-muted-foreground leading-relaxed">
-              Welcome to my corner of the internet! I'm Nina, a curious soul
-              navigating the beautiful chaos of life and career. By day, I'm
-              building my professional path; by night, I'm reflecting on the
+              Welcome to my corner of the internet! I&apos;m Nina, a curious soul
+              navigating the beautiful chaos of life and career. By day, I&apos;m
+              building my professional path; by night, I&apos;m reflecting on the
               lessons learned along the way.
             </p>
 
             <p className="text-muted-foreground leading-relaxed">
-              I believe in the power of sharing stories. Whether it's a triumph
+              I believe in the power of sharing stories. Whether it&apos;s a triumph
               at work, a moment of vulnerability, or simply a random thought
               that struck me on a Tuesday afternoon—I find joy in putting words
               to experiences.
             </p>
 
             <p className="text-muted-foreground leading-relaxed">
-              When I'm not writing, you'll find me exploring new coffee shops,
+              When I&apos;m not writing, you&apos;ll find me exploring new coffee shops,
               diving into a good book, or planning my next adventure. This space
               is where I document it all—the wins, the lessons, and everything
               in between.

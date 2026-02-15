@@ -7,16 +7,18 @@ import { Container } from "@/components/ui/Container";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { Badge } from "@/components/ui/Badge";
 import { motion } from "framer-motion";
+import type { PortableTextBlock } from "next-sanity";
+import type { SanityImage } from "@/types/sanity";
 
 interface Post {
   title: string;
   slug: { current: string };
-  mainImage: any;
+  mainImage?: SanityImage;
   publishedAt: string;
-  body: any[];
-  author: {
+  body: PortableTextBlock[];
+  author?: {
     name: string;
-    image: any;
+    image?: SanityImage;
   };
 }
 

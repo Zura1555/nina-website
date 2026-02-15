@@ -3,15 +3,17 @@
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { Sun, Moon } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  
+  // Use useSyncExternalStore to avoid hydration mismatch without setState in effect
+  const mounted = useSyncExternalStore(
+    () => () => {}, // subscribe (no-op since we don't need updates)
+    () => true, // getSnapshot on client
+    () => false // getSnapshot on server
+  );
 
   if (!mounted) {
     return (

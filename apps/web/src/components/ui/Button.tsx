@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { ReactNode, forwardRef, ButtonHTMLAttributes } from "react";
+import { ReactNode, forwardRef } from "react";
 import { motion, HTMLMotionProps } from "framer-motion";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "link";

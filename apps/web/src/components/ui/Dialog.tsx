@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { forwardRef, HTMLAttributes } from "react";
+import { forwardRef } from "react";
 import { motion, HTMLMotionProps } from "framer-motion";
 
 interface DialogProps extends HTMLMotionProps<"dialog"> {
@@ -19,7 +19,7 @@ export const Dialog = forwardRef<HTMLDialogElement, DialogProps>(
           "open:animate-fade-in closed:animate-fade-out",
           className
         )}
-        onClose={(e) => {
+        onClose={() => {
           onOpenChange?.(false);
         }}
         {...props}

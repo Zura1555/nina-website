@@ -37,7 +37,7 @@ export function Hero() {
               variants={fadeInUp}
               className="text-primary font-medium mb-4"
             >
-              Hey there, I'm
+              Hey there, I&apos;m
             </motion.p>
 
             <motion.h1

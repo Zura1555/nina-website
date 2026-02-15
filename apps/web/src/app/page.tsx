@@ -1,5 +1,6 @@
 import { PageContent } from "@/components/PageContent";
 import { getHomepage } from "@/sanity/queries";
+import Link from "next/link";
 
 export async function generateMetadata() {
   const homepage = await getHomepage();
@@ -32,12 +33,12 @@ export default async function Home() {
         <p className="text-muted-foreground mb-8">
           Create a Page document in Sanity with slug &quot;home&quot; to see your homepage.
         </p>
-        <a
+        <Link
           href="/studio"
           className="inline-flex items-center px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90"
         >
           Go to Sanity Studio
-        </a>
+        </Link>
       </div>
     </div>
   );

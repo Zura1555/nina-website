@@ -22,12 +22,23 @@ interface CommandPaletteProps {
   onOpenChange: (open: boolean) => void;
 }
 
-export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
+// Inner component that gets remounted when palette opens
+// This avoids setState in effect by using initial state
+function CommandPaletteDialog({ 
+  onClose 
+}: { 
+  onClose: () => void 
+}) {
   const router = useRouter();
   const { theme, setTheme } = useTheme();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus input on mount
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
 
   const commands: Command[] = [
     {
@@ -84,18 +95,6 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
     return acc;
   }, {} as Record<string, Command[]>);
 
-  useEffect(() => {
-    if (open && inputRef.current) {
-      inputRef.current.focus();
-    }
-    setQuery("");
-    setSelectedIndex(0);
-  }, [open]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [query]);
-
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const totalItems = Object.values(groupedCommands).flat().length;
 
@@ -113,128 +112,141 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
         const allCommands = Object.values(groupedCommands).flat();
         if (allCommands[selectedIndex]) {
           allCommands[selectedIndex].action();
-          onOpenChange(false);
+          onClose();
         }
         break;
     }
   };
 
-  // Calculate flat index to scroll into view
+  // Scroll selected item into view
   useEffect(() => {
     const items = document.querySelectorAll("[data-command-item]");
     const item = items[selectedIndex] as HTMLElement;
     item?.scrollIntoView({ block: "nearest" });
-  }, [selectedIndex, groupedCommands]);
+  }, [selectedIndex]);
 
+  return (
+    <>
+      {/* Backdrop */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
+        onClick={onClose}
+      />
+
+      {/* Dialog */}
+      <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: -10 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: -10 }}
+          transition={{ duration: 0.15, ease: "easeOut" }}
+          className={cn(
+            "w-full max-w-lg bg-card rounded-xl border border-card-border",
+            "shadow-lg overflow-hidden"
+          )}
+        >
+          {/* Search Input */}
+          <div className="flex items-center px-4 py-3 border-b border-border">
+            <Search className="w-5 h-5 text-muted-foreground mr-3" />
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder="Type a command or search..."
+              value={query}
+                onChange={(e) => {
+                  setQuery(e.target.value);
+                  setSelectedIndex(0);
+                }}
+              onKeyDown={handleKeyDown}
+              className="flex-1 bg-transparent border-none outline-none text-base placeholder:text-muted-foreground"
+            />
+            <div className="flex items-center gap-1">
+              <Kbd>ESC</Kbd>
+            </div>
+          </div>
+
+          {/* Results */}
+          <div className="max-h-80 overflow-y-auto py-2">
+            {Object.keys(groupedCommands).length === 0 ? (
+              <div className="px-4 py-8 text-center text-muted-foreground text-sm">
+                No results found for &quot;{query}&quot;
+              </div>
+            ) : (
+              Object.entries(groupedCommands).map(([category, cmds]) => (
+                <div key={category} className="mb-2">
+                  <div className="px-4 py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                    {category}
+                  </div>
+                  {cmds.map((cmd) => {
+                    const flatIndex = Object.values(groupedCommands)
+                      .flat()
+                      .findIndex((c) => c.id === cmd.id);
+                    const isSelected = flatIndex === selectedIndex;
+
+                    return (
+                      <button
+                        key={cmd.id}
+                        data-command-item
+                        className={cn(
+                          "w-full flex items-center justify-between px-4 py-2.5 text-left",
+                          "transition-colors",
+                          isSelected
+                            ? "bg-primary/10 text-primary"
+                            : "hover:bg-muted text-foreground"
+                        )}
+                        onClick={() => {
+                          cmd.action();
+                          onClose();
+                        }}
+                        onMouseEnter={() => setSelectedIndex(flatIndex)}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className={cn(isSelected ? "text-primary" : "text-muted-foreground")}>
+                            {cmd.icon}
+                          </span>
+                          <span className="text-sm">{cmd.label}</span>
+                        </div>
+                        {cmd.shortcut && (
+                          <Kbd className="text-xs">{cmd.shortcut}</Kbd>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/30">
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <Keyboard className="w-3.5 h-3.5" />
+              <span>Navigate with arrow keys</span>
+            </div>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <span>Press</span>
+              <Kbd>↵</Kbd>
+              <span>to select</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </>
+  );
+}
+
+// Wrapper component that manages mounting/unmounting
+export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
   return (
     <AnimatePresence>
       {open && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40"
-            onClick={() => onOpenChange(false)}
-          />
-
-          {/* Dialog */}
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-[20vh]">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              transition={{ duration: 0.15, ease: "easeOut" }}
-              className={cn(
-                "w-full max-w-lg bg-card rounded-xl border border-card-border",
-                "shadow-lg overflow-hidden"
-              )}
-            >
-              {/* Search Input */}
-              <div className="flex items-center px-4 py-3 border-b border-border">
-                <Search className="w-5 h-5 text-muted-foreground mr-3" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder="Type a command or search..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  className="flex-1 bg-transparent border-none outline-none text-base placeholder:text-muted-foreground"
-                />
-                <div className="flex items-center gap-1">
-                  <Kbd>ESC</Kbd>
-                </div>
-              </div>
-
-              {/* Results */}
-              <div className="max-h-80 overflow-y-auto py-2">
-                {Object.keys(groupedCommands).length === 0 ? (
-                  <div className="px-4 py-8 text-center text-muted-foreground text-sm">
-                    No results found for "{query}"
-                  </div>
-                ) : (
-                  Object.entries(groupedCommands).map(([category, cmds]) => (
-                    <div key={category} className="mb-2">
-                      <div className="px-4 py-1.5 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        {category}
-                      </div>
-                      {cmds.map((cmd, index) => {
-                        const flatIndex = Object.values(groupedCommands)
-                          .flat()
-                          .findIndex((c) => c.id === cmd.id);
-                        const isSelected = flatIndex === selectedIndex;
-
-                        return (
-                          <button
-                            key={cmd.id}
-                            data-command-item
-                            className={cn(
-                              "w-full flex items-center justify-between px-4 py-2.5 text-left",
-                              "transition-colors",
-                              isSelected
-                                ? "bg-primary/10 text-primary"
-                                : "hover:bg-muted text-foreground"
-                            )}
-                            onClick={() => {
-                              cmd.action();
-                              onOpenChange(false);
-                            }}
-                            onMouseEnter={() => setSelectedIndex(flatIndex)}
-                          >
-                            <div className="flex items-center gap-3">
-                              <span className={cn(isSelected ? "text-primary" : "text-muted-foreground")}>
-                                {cmd.icon}
-                              </span>
-                              <span className="text-sm">{cmd.label}</span>
-                            </div>
-                            {cmd.shortcut && (
-                              <Kbd className="text-xs">{cmd.shortcut}</Kbd>
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))
-                )}
-              </div>
-
-              {/* Footer */}
-              <div className="flex items-center justify-between px-4 py-2 border-t border-border bg-muted/30">
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Keyboard className="w-3.5 h-3.5" />
-                  <span>Navigate with arrow keys</span>
-                </div>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <span>Press</span>
-                  <Kbd>↵</Kbd>
-                  <span>to select</span>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </>
+        <CommandPaletteDialog 
+          key="command-palette" 
+          onClose={() => onOpenChange(false)} 
+        />
       )}
     </AnimatePresence>
   );

@@ -7,13 +7,14 @@ import { formatDate } from "@/lib/utils";
 import { urlFor } from "@/sanity/image";
 import { client } from "@/sanity/client";
 import { FadeIn } from "@/components/layout/FadeIn";
+import type { SanityImage } from "@/types/sanity";
 
 interface Post {
   _id: string;
   title: string;
   slug: { current: string };
   excerpt?: string;
-  mainImage?: any;
+  mainImage?: SanityImage;
   publishedAt: string;
   tags?: string[];
 }

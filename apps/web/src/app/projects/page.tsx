@@ -20,9 +20,9 @@ export default async function ProjectsPage() {
             Projects & Work
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl">
-            A collection of projects, initiatives, and creative endeavors I've
+            A collection of projects, initiatives, and creative endeavors I&apos;ve
             worked on. Each one represents a piece of my journey and the lessons
-            I've learned along the way.
+            I&apos;ve learned along the way.
           </p>
         </div>
 

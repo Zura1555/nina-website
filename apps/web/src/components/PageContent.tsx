@@ -15,6 +15,12 @@ interface PageContentProps {
   page: Page;
 }
 
+type HeroSectionData = Extract<PageSection, { _type: "hero" }>;
+type TextImageSectionData = Extract<PageSection, { _type: "textImage" }> & { caption?: string };
+type TextSectionData = Extract<PageSection, { _type: "text" }>;
+type ImageSectionData = Extract<PageSection, { _type: "image" }>;
+type CTASectionData = Extract<PageSection, { _type: "cta" }>;
+
 export function PageContent({ page }: PageContentProps) {
   const sections = page.sections || [];
 
@@ -68,7 +74,7 @@ export function PageContent({ page }: PageContentProps) {
   );
 }
 
-function HeroSection({ section }: { section: any }) {
+function HeroSection({ section }: { section: HeroSectionData }) {
   return (
     <section className="py-8 md:py-12 lg:py-16 px-4 overflow-hidden">
       <Container>
@@ -113,7 +119,7 @@ function HeroSection({ section }: { section: any }) {
   );
 }
 
-function TextImageSection({ section }: { section: any }) {
+function TextImageSection({ section }: { section: TextImageSectionData }) {
   const { layout = "imageLeft" } = section;
   const imageUrl = section.image ? urlFor(section.image).width(800).height(600).url() : null;
 
@@ -223,7 +229,7 @@ function TextImageSection({ section }: { section: any }) {
   );
 }
 
-function TextSection({ section }: { section: any }) {
+function TextSection({ section }: { section: TextSectionData }) {
   return (
     <section className="py-8 md:py-12 px-4">
       <Container size="narrow">
@@ -249,7 +255,7 @@ function TextSection({ section }: { section: any }) {
   );
 }
 
-function ImageSection({ section }: { section: any }) {
+function ImageSection({ section }: { section: ImageSectionData }) {
   const imageUrl = section.image ? urlFor(section.image).width(1200).height(800).url() : null;
 
   return (
@@ -280,7 +286,7 @@ function ImageSection({ section }: { section: any }) {
   );
 }
 
-function CTASection({ section }: { section: any }) {
+function CTASection({ section }: { section: CTASectionData }) {
   return (
     <section className="py-12 md:py-16 px-4">
       <Container size="narrow">
