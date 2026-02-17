@@ -1,5 +1,5 @@
-import { client } from './client'
-import type { Project, BlogPost, Page } from '@/types/sanity'
+import { sanityFetch } from "./fetch";
+import type { Project, BlogPost, Page } from "@/types/sanity";
 
 export const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
   _id,
@@ -34,7 +34,7 @@ export const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
     buttonText,
     buttonUrl
   }
-}`
+}`;
 
 export const PROJECTS_QUERY = `*[_type == "project"]|order(_createdAt desc){
   _id,
@@ -47,7 +47,7 @@ export const PROJECTS_QUERY = `*[_type == "project"]|order(_createdAt desc){
   link,
   github,
   publishedAt
-}`
+}`;
 
 export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true]|order(_createdAt desc){
   _id,
@@ -60,7 +60,7 @@ export const FEATURED_PROJECTS_QUERY = `*[_type == "project" && featured == true
   link,
   github,
   publishedAt
-}`
+}`;
 
 export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $slug][0]{
   _id,
@@ -74,7 +74,7 @@ export const PROJECT_BY_SLUG_QUERY = `*[_type == "project" && slug.current == $s
   link,
   github,
   publishedAt
-}`
+}`;
 
 export const LATEST_POSTS_QUERY = `*[_type == "post"]|order(publishedAt desc)[0...3]{
   _id,
@@ -84,7 +84,7 @@ export const LATEST_POSTS_QUERY = `*[_type == "post"]|order(publishedAt desc)[0.
   excerpt,
   mainImage,
   "tags": tags
-}`
+}`;
 
 export const POSTS_WITH_LIMIT_QUERY = `*[_type == "post"]|order(publishedAt desc)[0...$limit]{
   _id,
@@ -94,28 +94,50 @@ export const POSTS_WITH_LIMIT_QUERY = `*[_type == "post"]|order(publishedAt desc
   excerpt,
   mainImage,
   "tags": tags
-}`
+}`;
 
 export async function getPage(slug: string): Promise<Page | null> {
-  return client.fetch<Page | null>(PAGE_QUERY, { slug })
+  return sanityFetch<Page | null>({
+    query: PAGE_QUERY,
+    params: { slug },
+    tags: [`page:${slug}`, "page"],
+  });
 }
 
 export async function getProjects(): Promise<Project[]> {
-  return client.fetch<Project[]>(PROJECTS_QUERY)
+  return sanityFetch<Project[]>({
+    query: PROJECTS_QUERY,
+    tags: ["project"],
+  });
 }
 
 export async function getFeaturedProjects(): Promise<Project[]> {
-  return client.fetch<Project[]>(FEATURED_PROJECTS_QUERY)
+  return sanityFetch<Project[]>({
+    query: FEATURED_PROJECTS_QUERY,
+    tags: ["project"],
+  });
 }
 
 export async function getProjectBySlug(slug: string): Promise<Project | null> {
-  return client.fetch<Project | null>(PROJECT_BY_SLUG_QUERY, { slug })
+  return sanityFetch<Project | null>({
+    query: PROJECT_BY_SLUG_QUERY,
+    params: { slug },
+    tags: [`project:${slug}`, "project"],
+  });
 }
 
 export async function getLatestPosts(limit: number = 3): Promise<BlogPost[]> {
-  return client.fetch<BlogPost[]>(POSTS_WITH_LIMIT_QUERY, { limit })
+  return sanityFetch<BlogPost[]>({
+    query: POSTS_WITH_LIMIT_QUERY,
+    params: { limit },
+    tags: ["post"],
+  });
 }
 
 export async function getHomepage(): Promise<Page | null> {
-  return client.fetch<Page | null>(PAGE_QUERY, { slug: 'home' })
+  return sanityFetch<Page | null>({
+    query: PAGE_QUERY,
+    params: { slug: "home" },
+    tags: ["page:home", "page"],
+  });
 }
